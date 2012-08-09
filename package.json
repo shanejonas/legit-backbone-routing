@@ -1,4 +1,6 @@
 {
+  "name": "legit-backbone-routing",
+  "version": "0.0.5",
   "amd": {},
   "volo": {
     "baseUrl": "www/js/lib",

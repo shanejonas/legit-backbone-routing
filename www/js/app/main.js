@@ -21,8 +21,6 @@ define(function (require) {
         Backbone.history.navigate('/world', true)
       });
       $('body').html(message);
-      /* console.log($(document).find('body').html(message)); */
-      console.log(document.innerHTML);
     },
 
     world: function(){

@@ -1,6 +1,7 @@
 var fs = require('fs');
 var sys = require('sys');
 var express = require('express');
+var markup = fs.readFileSync(__dirname + '/../www/public/index.html');
 
 var app = express.createServer();
 app.configure(function(){
@@ -11,6 +12,7 @@ app.configure(function(){
 window = document = navigator = null;
 
 app.get('*', function(req, res, next){
+  console.log('requesting:' + req.url);
 
   var requirejs = require('../tools/r');
 
@@ -24,14 +26,12 @@ app.get('*', function(req, res, next){
   });
   var jsdom = require('jsdom');
 
-  var markup = fs.readFileSync(__dirname + '/../www/public/index.html');
-
   if(!window){
     document = jsdom.jsdom(markup);
     window = document.createWindow();
     navigator = window.navigator;
-    window.location.path = req.url;
   }
+  window.location.path = req.url;
 
   requirejs(['app/main'], function(main){
     var server_url = req.url.substr(1);

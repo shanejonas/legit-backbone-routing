@@ -2,6 +2,17 @@ var fs = require('fs');
 var sys = require('sys');
 var express = require('express');
 var markup = fs.readFileSync(__dirname + '/../www/public/index.html');
+var jsdom = require('jsdom');
+var requirejs = require('../tools/r');
+
+requirejs.config({
+  nodeRequire: require,
+  appDir: "../www",
+  baseUrl: __dirname + "/../www/js/lib",
+  paths: {
+    app: "../app"
+  }
+});
 
 var app = express.createServer();
 app.configure(function(){
@@ -9,28 +20,12 @@ app.configure(function(){
   app.use(app.router);
 });
 
-window = document = navigator = null;
+document = jsdom.jsdom(markup);
+window = document.createWindow();
+navigator = window.navigator;
 
 app.get('*', function(req, res, next){
   console.log('requesting:' + req.url);
-
-  var requirejs = require('../tools/r');
-
-  requirejs.config({
-    nodeRequuire: require,
-    appDir: "../www",
-    baseUrl: __dirname + "/../www/js/lib",
-    paths: {
-      app: "../app"
-    }
-  });
-  var jsdom = require('jsdom');
-
-  if(!window){
-    document = jsdom.jsdom(markup);
-    window = document.createWindow();
-    navigator = window.navigator;
-  }
   window.location.path = req.url;
 
   requirejs(['app/main'], function(main){

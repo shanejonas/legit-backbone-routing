@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "jsdom": "~0.2.15",
-    "express": "~3.0.0rc2"
+    "express": "~4.17.1"
   }
 }
